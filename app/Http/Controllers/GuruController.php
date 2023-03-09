@@ -22,12 +22,9 @@ class GuruController extends Controller
             'nip' => $request->nip,
         ]);
 
-        $token = $user->createToken('auth-sanctum')->plainTextToken;
-
         return response()->json([
+            'pesan' => 'Data sudah ditambahkan',
             'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'
         ]);
     }
 
@@ -46,20 +43,15 @@ class GuruController extends Controller
         // }
 
         $user = Guru::where('nip', $request->nip)->where('nama', $request->nama)->firstOrFail();
-        $token = $user->createToken('auth-sanctum')->plainTextToken;
         if ($user){
             return response()
             ->json(['pesan' => 'Berhasil Login!',
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'], 401);
+            'data' => $user], 401);
 
         } else {
             return response()
             ->json(['pesan' => 'Gagal Login!',
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'], 404);
+            'data' => $user], 404);
         }
 
     }
@@ -70,5 +62,77 @@ class GuruController extends Controller
         return response()->json([
             'msg' => 'Berhasil Logout'
         ]);
+    }
+
+    public function index()
+    {
+        $data = Guru::all();
+
+        return response()->json($data);
+    }
+    
+    public function show($id)
+    {
+        $data = Guru::where('id',$id)->get();
+
+        return response()->json($data);
+    }
+
+    public function update(Request $request,$id)
+    {
+        $this->validate($request, [
+            'nama' => 'required | regex:/[A-Z]/',
+            'nip' => 'required | min:18 | numeric',
+        ]);
+
+        $data = [
+            'nama'=>$request->input('nama'),
+            'nip'=>$request->input('nip'),
+        ];
+
+        $guru = Guru::where('id',$id)->update($data);
+
+        if($guru){
+            return response()->json([
+                'pesan'=>'Data berhasil disimpan',
+                'status'=>200,
+                'data'=>$data
+            ]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $guru = Guru::where('id', $id)->delete();
+
+        if($guru){
+            return response()->json([
+                'pesan'=>'Data berhasil dihapus',
+                'status'=>200
+            ]);
+        }
+    }
+
+    public function create(Request $request)
+    {
+        $this->validate($request, [
+            'nama' => 'required | regex:/[A-Z]/',
+            'nip' => 'required | min:18 | numeric',
+        ]);
+
+        $data = [
+            'nama'=>$request->input('nama'),
+            'nip'=>$request->input('nip'),
+        ];
+
+        $guru = Guru::create($data);
+
+        if($guru){
+            return response()->json([
+                'pesan'=>'Data berhasil disimpan',
+                'status'=>200,
+                'data'=>$data
+            ]);
+        }
     }
 }

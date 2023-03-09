@@ -26,12 +26,9 @@ class SiswaController extends Controller
             'jurusan' => $request->jurusan
         ]);
 
-        $token = $user->createToken('auth-sanctum')->plainTextToken;
-
         return response()->json([
+            'pesan'=>'Data Berhasil Disimpan',
             'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'
         ]);
     }
 
@@ -49,23 +46,17 @@ class SiswaController extends Controller
         //     ->json(['pesan' => 'Berhasil Login!'], 401);
         // }
 
-        $user = User::where('nisn', $request->nisn)->firstOrFail();
-
-        $token = $user->createToken('auth-sanctum')->plainTextToken;
+        $user = User::where('nama', $request->nama)->where('nisn', $request->nisn)->firstOrFail();
 
         if ($user){
             return response()
             ->json(['pesan' => 'Berhasil Login!',
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'], 401);
+            'data' => $user], 401);
 
         } else {
             return response()
             ->json(['pesan' => 'Gagal Login!',
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'], 404);
+            'data' => $user], 404);
         }
 
     }
@@ -76,5 +67,89 @@ class SiswaController extends Controller
         return response()->json([
             'msg' => 'Berhasil Logout'
         ]);
+    }
+
+    public function index()
+    {
+        $data = User::all();
+
+        return response()->json($data);
+    }
+    
+    public function show($id)
+    {
+        $data = User::where('id',$id)->get();
+
+        return response()->json($data);
+    }
+
+    public function update(Request $request,$id)
+    {
+        $this->validate($request, [
+            'nama' => 'required | regex:/[A-Z]/',
+            'nisn' => 'required | min:10 | numeric',
+            'nis' => 'required | min:5 | numeric',
+            'kelas' => 'required | numeric',
+            'jurusan' => 'required | numeric'
+        ]);
+
+        $data = [
+            'nama'=>$request->input('nama'),
+            'nisn'=>$request->input('nisn'),
+            'nis'=>$request->input('nis'),
+            'kelas'=>$request->input('kelas'),
+            'jurusan'=>$request->input('jurusan'),
+        ];
+
+        $user = User::where('id',$id)->update($data);
+
+        if($user){
+            return response()->json([
+                'pesan'=>'Data berhasil disimpan',
+                'status'=>200,
+                'data'=>$data
+            ]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $user = User::where('id', $id)->delete();
+
+        if($user){
+            return response()->json([
+                'pesan'=>'Data berhasil dihapus',
+                'status'=>200
+            ]);
+        }
+    }
+
+    public function create(Request $request)
+    {
+        $this->validate($request, [
+            'nama' => 'required | regex:/[A-Z]/',
+            'nisn' => 'required | min:10 | numeric',
+            'nis' => 'required | min:5 | numeric',
+            'kelas' => 'required | numeric',
+            'jurusan' => 'required | numeric'
+        ]);
+
+        $data = [
+            'nama'=>$request->input('nama'),
+            'nisn'=>$request->input('nisn'),
+            'nis'=>$request->input('nis'),
+            'kelas'=>$request->input('kelas'),
+            'jurusan'=>$request->input('jurusan')
+        ];
+
+        $user = User::create($data);
+
+        if($user){
+            return response()->json([
+                'pesan'=>'Data berhasil disimpan',
+                'status'=>200,
+                'data'=>$data
+            ]);
+        }
     }
 }
