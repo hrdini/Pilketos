@@ -124,32 +124,48 @@ class SiswaController extends Controller
         }
     }
 
-    public function create(Request $request)
-    {
+    public function updateStatus($id, Request $request){
         $this->validate($request, [
-            'nama' => 'required | regex:/[A-Z]/',
-            'nisn' => 'required | min:10 | numeric',
-            'nis' => 'required | min:5 | numeric',
-            'kelas' => 'required | numeric',
-            'jurusan' => 'required | numeric'
+            'status'=>'required'
         ]);
 
-        $data = [
-            'nama'=>$request->input('nama'),
-            'nisn'=>$request->input('nisn'),
-            'nis'=>$request->input('nis'),
-            'kelas'=>$request->input('kelas'),
-            'jurusan'=>$request->input('jurusan')
-        ];
-
-        $user = User::create($data);
-
-        if($user){
+        $status = $request->input('status_pilih');
+        $run = User::where('id', $id)->update($status);
+        
+        if($run){
             return response()->json([
-                'pesan'=>'Data berhasil disimpan',
-                'status'=>200,
-                'data'=>$data
-            ]);
+                'pesan'=>'Status berhasil diubah',
+                'status'=>$status
+             ]);
         }
     }
+
+    // public function create(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'nama' => 'required | regex:/[A-Z]/',
+    //         'nisn' => 'required | min:10 | numeric',
+    //         'nis' => 'required | min:5 | numeric',
+    //         'kelas' => 'required | numeric',
+    //         'jurusan' => 'required | numeric'
+    //     ]);
+
+    //     $data = [
+    //         'nama'=>$request->input('nama'),
+    //         'nisn'=>$request->input('nisn'),
+    //         'nis'=>$request->input('nis'),
+    //         'kelas'=>$request->input('kelas'),
+    //         'jurusan'=>$request->input('jurusan')
+    //     ];
+
+    //     $user = User::create($data);
+
+    //     if($user){
+    //         return response()->json([
+    //             'pesan'=>'Data berhasil disimpan',
+    //             'status'=>200,
+    //             'data'=>$data
+    //         ]);
+    //     }
+    // }
 }

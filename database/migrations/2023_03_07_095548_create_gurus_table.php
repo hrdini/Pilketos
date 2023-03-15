@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->bigInteger('nip');
+            $table->boolean('status_pilih')->default(0)->nullable();
             $table->timestamps();
         });
     }

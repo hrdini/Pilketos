@@ -22,7 +22,8 @@ class User extends Authenticatable
         'nisn',
         'nis',
         'kelas',
-        'jurusan'
+        'jurusan',
+        'status_pilihan'
     ];
 
     /**

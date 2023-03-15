@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('visi');
             $table->string('misi');
             $table->integer('periode');
-            $table->boolean('terpilih');
+            $table->boolean('terpilih')->default(0);
             $table->timestamps();
         });
     }

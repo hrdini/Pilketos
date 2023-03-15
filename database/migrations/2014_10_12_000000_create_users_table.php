@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('nis');
             $table->integer('kelas');
             $table->integer('jurusan');
+            $table->boolean('status_pilih')->default(0)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Http\Requests\StoreGuruRequest;
 use App\Http\Requests\UpdateGuruRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,12 +15,12 @@ class GuruController extends Controller
     {
         $request->validate([
             'nama' => 'required | regex:/[A-Z]/',
-            'nip' => 'required | min:18 | numeric',
+            'nip' => 'required | min:18 | numeric'
         ]);
 
         $user = Guru::create([
             'nama' => $request->nama,
-            'nip' => $request->nip,
+            'nip' => $request->nip
         ]);
 
         return response()->json([
@@ -101,6 +102,23 @@ class GuruController extends Controller
         }
     }
 
+    public function updateStatus($id, Request $request){
+        $this->validate($request, [
+            'status'=>'required'
+        ]);
+
+        $status = $request->input('status_pilih');
+        $run = Guru::where('id', $id)->update($status);
+        
+        if($run){
+            return response()->json([
+                'pesan'=>'Status berhasil diubah',
+                'status'=>$status
+             ]);
+        }
+    }
+
+
     public function destroy($id)
     {
         $guru = Guru::where('id', $id)->delete();
@@ -113,26 +131,28 @@ class GuruController extends Controller
         }
     }
 
-    public function create(Request $request)
-    {
-        $this->validate($request, [
-            'nama' => 'required | regex:/[A-Z]/',
-            'nip' => 'required | min:18 | numeric',
-        ]);
+    // public function create(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'nama' => 'required | regex:/[A-Z]/',
+    //         'nip' => 'required | min:18 | numeric',
+    //         'status_pilih' => 'required | default 0 | nullable'
+    //     ]);
 
-        $data = [
-            'nama'=>$request->input('nama'),
-            'nip'=>$request->input('nip'),
-        ];
+    //     $data = [
+    //         'nama'=>$request->input('nama'),
+    //         'nip'=>$request->input('nip'),
+    //         'status_pilih'=>$request->input('status_pilih')
+    //     ];
 
-        $guru = Guru::create($data);
+    //     $guru = Guru::create($data);
 
-        if($guru){
-            return response()->json([
-                'pesan'=>'Data berhasil disimpan',
-                'status'=>200,
-                'data'=>$data
-            ]);
-        }
-    }
+    //     if($guru){
+    //         return response()->json([
+    //             'pesan'=>'Data berhasil disimpan',
+    //             'status'=>200,
+    //             'data'=>$data
+    //         ]);
+    //     }
+    // }
 }
