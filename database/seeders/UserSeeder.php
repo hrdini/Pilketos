@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class AdminSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,16 +18,16 @@ class AdminSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
  
-    	for($i = 1; $i <= 5; $i++){
+    	for($i = 1; $i <= 100; $i++){
  
-    		DB::table('admins')->insert([
-    			'username' => $faker->name,
-    			'code' => $faker->numerify('#####')
+    		DB::table('users')->insert([
+    			'nama' => $faker->name,
+    			'nisn' => $faker->numerify('##########'),
+                'nis' => $faker->numerify('#####'),
+    			'kelas' => $faker->numberBetween(1,3),
+                'jurusan' => $faker->numberBetween(1,6)
     		]);
  
     	}
- 
     }
-    
-    
 }
