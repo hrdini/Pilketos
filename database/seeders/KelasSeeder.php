@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class KelasSeeder extends Seeder
 {
@@ -14,6 +15,14 @@ class KelasSeeder extends Seeder
      */
     public function run()
     {
-        //
+    	for($i = 1; $i <= 3; $i++){
+ 
+    		DB::table('kelas')->insert([
+    			'kelas' => 'XII'
+    		]);
+ 
+    	}
+        
     }
+    
 }
