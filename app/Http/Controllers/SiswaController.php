@@ -15,6 +15,7 @@ class SiswaController extends Controller
             'nisn' => 'required | min:10 | numeric',
             'nis' => 'required | min:5 | numeric',
             'kelas' => 'required | numeric',
+            'password'=>'required | regex:/[a-z]/ | regex:/[A-Z]/ | regex:/[0-9]/ | regex:/[@$!%*#?&]/',
             'jurusan' => 'required | numeric'
         ]);
 
@@ -23,6 +24,7 @@ class SiswaController extends Controller
             'nisn' => $request->nisn,
             'nis' => $request->nis,
             'kelas' => $request->kelas,
+            'password' => $request->password,
             'jurusan' => $request->jurusan
         ]);
 
@@ -37,6 +39,7 @@ class SiswaController extends Controller
         $request->validate([
             'nama' => 'required | regex:/[A-Z]/',
             'nisn' => 'required | min:10 | numeric',
+            'password'=>'required | regex:/[a-z]/ | regex:/[A-Z]/ | regex:/[0-9]/ | regex:/[@$!%*#?&]/'
         ]);
 
         // if (!Auth::attempt(
